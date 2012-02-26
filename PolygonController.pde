@@ -4,6 +4,7 @@ class PolygonController {
   int numSides;
   float radius;
   PVector scale;
+  PVector position;
 
   //Re-using some PVector objects to reduce garbage during calcs in a tight loop
   PVector workVectorA;
@@ -20,6 +21,8 @@ class PolygonController {
   
   void construct(int numSides, float radius, FWorld world) {
     scale = new PVector(1,1);
+    position = new PVector();
+
     workVectorA = new PVector();
     workVectorB = new PVector();
     workVectorC = new PVector();
@@ -35,17 +38,26 @@ class PolygonController {
   }
   
   void setPosition(float x, float y) {
-    poly.setPosition(x, y);
+    position.x = x;
+    position.y = y;
+
+    if (null != poly) {
+      poly.setPosition(x, y);
+    }
   }
 
   void setScale(float u) {
-    scale.x = u;
-    scale.y = u;
+    setScale(u, u);
   }
 
   void setScale(float x, float y) {
-    scale.x = x;
-    scale.y = y;
+    //println("scaleX: " + x + " scaleY: " + y);
+    if (x != 0) {
+      scale.x = x;
+    }
+    if (y != 0) {
+      scale.y = y;
+    }
   }
   
   void setWorld(FWorld world) {
@@ -69,9 +81,7 @@ class PolygonController {
       vertices[vertexNum][1] = radius * sin(2*PI*vertexNum/sideCount);
     }
     
-    if (null != world) {
-      world.remove(poly);
-    }
+    Polygon oldPoly = poly;
 
     //Build physics object, copy old position+rotation
     poly = new Polygon();
@@ -79,6 +89,16 @@ class PolygonController {
     poly.setFill(120, 30, 90);
     poly.setDensity(10);
     poly.setRestitution(0.5);
+    if (null != oldPoly) {
+      //Copy the physics properties that are likely to be different from the old body.
+      poly.setPosition(oldPoly.getX(), oldPoly.getY());
+      poly.setRotation(oldPoly.getRotation());
+      poly.setAngularVelocity(oldPoly.getAngularVelocity());
+      poly.setForce(oldPoly.getForceX(), oldPoly.getForceY());
+      poly.setVelocity(oldPoly.getVelocityX(), oldPoly.getVelocityY());
+    } else {
+      poly.setPosition(position.x, position.y);
+    }
     poly.setSideCount(numSides);
 
     for (int vertexNum = 0; vertexNum < sideCount; vertexNum++) {
@@ -104,7 +124,7 @@ class PolygonController {
     }
     
     if (null != world) {
-      world.remove(poly);
+      world.remove(oldPoly);
       addToWorld();
     }
   }
