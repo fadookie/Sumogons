@@ -3,6 +3,7 @@ class PolygonController {
   FWorld world;
   int numSides;
   float radius;
+  PVector defaultScale;
   PVector scale;
   PVector position;
   static final float scaleLimit = 0.02; //The distance the scale on any axis is allowed to be from 0, if it gets too close to 0 it causes the physics engine to glitch
@@ -21,6 +22,7 @@ class PolygonController {
   }
   
   void construct(int numSides, float radius, FWorld world) {
+    defaultScale = new PVector(1,1);
     scale = new PVector(1,1);
     position = new PVector();
 
@@ -43,6 +45,20 @@ class PolygonController {
     if (null != poly) {
       poly.setPosition(x, y);
     }
+  }
+
+  PVector getPosition() {
+    position.x = poly.getX();
+    position.y = poly.getY();
+    return position;
+  }
+
+  void setNumSides(int n) {
+    numSides = n;
+  }
+
+  void resetScale() {
+    setScale(defaultScale.x, defaultScale.y);
   }
 
   void setScale(float u) {
