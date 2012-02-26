@@ -18,6 +18,13 @@ PVector up;
 float scaleAdjustFactor = 0.1;
 boolean shiftDown = false;
 
+static final char CENTER_KEY = 'c';
+static final char UP_KEY = 'w';
+static final char DOWN_KEY = 's';
+static final char LEFT_KEY = 'a';
+static final char RIGHT_KEY = 'd';
+static final char SCALE_MOD_KEY = SHIFT;
+
 void setup() {
   size(800, 600);
   smooth();
@@ -62,7 +69,7 @@ void draw() {
  * Listener for Mouse wheel movement
  */
 void mouseWheel(int delta) {
-  println(delta); 
+  //println(delta); 
   if (shiftDown) {
     scale.y += delta * scaleAdjustFactor;
   } else {
@@ -74,11 +81,25 @@ void mouseWheel(int delta) {
 
 void keyPressed() {
   if (CODED == key) {
-    if (SHIFT == keyCode) {
+    if (SCALE_MOD_KEY == keyCode) {
       shiftDown = true;
     }
   } else {
-    if ('=' == key) {
+    if (UP_KEY == key) {
+      player.getPoly().addForce(1000, 0);
+      println("add force up");
+    } else if (DOWN_KEY == key) {
+    } else if (LEFT_KEY == key) {
+    } else if (RIGHT_KEY == key) {
+    } else if (CENTER_KEY == key) {
+      scale.x = 1;
+      scale.y = 1;
+      player.resetScale();
+      player.updateShape();
+      //println("resetting scale");
+
+    //DEBUG keys
+    } else if ('=' == key) {
       numSides++;
       player.setNumSides(numSides);
       player.updateShape();
@@ -95,12 +116,6 @@ void keyPressed() {
     } else if ('_' == key) { //Shift =
       scale.x -= scaleAdjustFactor; 
       println("scale.x = " + scale.x);
-    } else if ('c' == key) {
-      scale.x = 1;
-      scale.y = 1;
-      player.resetScale();
-      player.updateShape();
-      println("resetting scale");
     } else if ('0' == key) {
       PolygonController poly = new PolygonController(numSides, 50.0, world);
       poly.setPosition(mouseX, mouseY);

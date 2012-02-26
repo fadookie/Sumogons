@@ -70,13 +70,13 @@ class PolygonController {
 
   void setScale(float x, float y) {
     float aspectRatio = x / y;
-    println("scaleX: " + x + " scaleY: " + y + " aspectRatio: " + aspectRatio);
+    //println("scaleX: " + x + " scaleY: " + y + " aspectRatio: " + aspectRatio);
     if (
         isFurtherThan(aspectRatio, 0, scaleLimit)
         && (aspectRatio < 33)
         && (aspectRatio > -33)
     ) {
-      println ("scale good.");
+      //println ("scale good.");
       scale.x = x;
       scale.y = y;
     }
