@@ -27,7 +27,6 @@ class PlayerController extends PolygonController {
       //see http://www.euclideanspace.com/maths/algebra/vectors/angleBetween/index.htm
       float angle = atan2(lookAt.y, lookAt.x) - atan2(up.y, up.x);
       poly.setRotation(angle);
-      println ("angle: " + angle);
     }
   }
 }

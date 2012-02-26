@@ -6,6 +6,7 @@ class PolygonController {
   PVector defaultScale;
   PVector scale;
   PVector position;
+  static final float polyCalcRotationOffset = -1.5707964; //Rotation offset when creating the polygon so it 'points' at the cursor. -1.5707964 rads = -90 degrees.
   static final float scaleLimit = 0.02; //The distance the scale on any axis is allowed to be from 0, if it gets too close to 0 it causes the physics engine to glitch
 
   //Re-using some PVector objects to reduce garbage during calcs in a tight loop
@@ -48,8 +49,10 @@ class PolygonController {
   }
 
   PVector getPosition() {
-    position.x = poly.getX();
-    position.y = poly.getY();
+    if (null != poly) {
+      position.x = poly.getX();
+      position.y = poly.getY();
+    }
     return position;
   }
 
@@ -89,7 +92,7 @@ class PolygonController {
   
   void addToWorld() {
     world.add(poly);
-    println("added " + this + " to world.");
+    //println("added " + this + " to world.");
   }
   
   FPoly getPoly() {
@@ -102,14 +105,18 @@ class PolygonController {
   void updateShape() {
     int sideCount = numSides;
     float[][] vertices = new float[sideCount][2]; //[n][0] = x, [n][1] = y
+
+    //Create an array of cartesian coords for a regular polygon of n sides
+    //See http://stackoverflow.com/questions/7198144/how-to-draw-a-n-sided-regular-polygon-in-cartesian-coordinates
     for (int vertexNum = 0; vertexNum < sideCount; vertexNum++) {
-      vertices[vertexNum][0] = radius * cos(2*PI*vertexNum/sideCount);
-      vertices[vertexNum][1] = radius * sin(2*PI*vertexNum/sideCount);
+      vertices[vertexNum][0] = radius * cos(2*PI*vertexNum/sideCount + polyCalcRotationOffset);
+      vertices[vertexNum][1] = radius * sin(2*PI*vertexNum/sideCount + polyCalcRotationOffset);
     }
     
     Polygon oldPoly = poly;
+    getPosition();
 
-    //Build physics object, copy old position+rotation
+    //Build new physics body
     poly = new Polygon();
     poly.setStrokeWeight(3);
     poly.setFill(120, 30, 90);
@@ -123,6 +130,7 @@ class PolygonController {
       poly.setForce(oldPoly.getForceX(), oldPoly.getForceY());
       poly.setVelocity(oldPoly.getVelocityX(), oldPoly.getVelocityY());
     } else {
+      //No old body, use caller supplied position or default
       poly.setPosition(position.x, position.y);
     }
     poly.setSideCount(numSides);
