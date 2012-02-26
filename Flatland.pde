@@ -13,21 +13,24 @@ PolygonController poly;
 ArrayList<PolygonController> shapes;
 int numSides = 3;
 int minSides = 3;
+PVector scale;
+float scaleAdjust = 1;
 
 void setup() {
   size(800, 600);
   smooth();
   
   shapes = new ArrayList<PolygonController>();
+  scale = new PVector(1,1);
 
   Fisica.init(this);
 
   world = new FWorld();
-  world.setGravity(0, 800);
+  world.setGravity(0, 0);
   world.setEdges();
-  world.remove(world.left);
-  world.remove(world.right);
-  world.remove(world.top);
+  //world.remove(world.left);
+  //world.remove(world.right);
+  //world.remove(world.top);
   
   world.setEdgesRestitution(0.5);
 }
@@ -44,25 +47,6 @@ void draw() {
   }
 }
 
-
-void mousePressed() {
-//  if (world.getBody(mouseX, mouseY) != null) {
-//    return;
-//  }
-
-  poly = new PolygonController(numSides, 50.0, world);
-  poly.setPosition(mouseX, mouseY);
-  poly.setWorld(world);
-  shapes.add(poly);
-  //poly.vertex(mouseX, mouseY);
-}
-
-void mouseDragged() {
-}
-
-void mouseReleased() {
-}
-
 void keyPressed() {
   if ('=' == key) {
     numSides++;
@@ -71,6 +55,19 @@ void keyPressed() {
     numSides--;
     numSides = constrain(numSides, minSides, 999);
     println("numSides = " + numSides);
+  } else if ('+' == key) { //Shift +
+    scale.x += scaleAdjust; 
+    println("scale.x = " + scale.x);
+  } else if ('_' == key) { //Shift =
+    scale.x -= scaleAdjust; 
+    println("scale.x = " + scale.x);
+  } else if ('a' == key) {
+    poly = new PolygonController(numSides, 50.0, world);
+    poly.setPosition(mouseX, mouseY);
+    poly.setWorld(world);
+    poly.setScale(scale.x, scale.y);
+    poly.updateShape();
+    shapes.add(poly);
   } else if (key == BACKSPACE) {
     FBody hovered = world.getBody(mouseX, mouseY);
     if ( hovered != null &&
