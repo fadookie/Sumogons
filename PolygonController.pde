@@ -5,6 +5,7 @@ class PolygonController {
   float radius;
   PVector scale;
   PVector position;
+  static final float scaleLimit = 0.02; //The distance the scale on any axis is allowed to be from 0, if it gets too close to 0 it causes the physics engine to glitch
 
   //Re-using some PVector objects to reduce garbage during calcs in a tight loop
   PVector workVectorA;
@@ -33,8 +34,6 @@ class PolygonController {
     if (null != world) {
       setWorld(world);
     }
-
-    this.updateShape(); //Force an update so the shape is valid
   }
   
   void setPosition(float x, float y) {
@@ -51,13 +50,21 @@ class PolygonController {
   }
 
   void setScale(float x, float y) {
-    //println("scaleX: " + x + " scaleY: " + y);
-    if (x != 0) {
+    float aspectRatio = x / y;
+    println("scaleX: " + x + " scaleY: " + y + " aspectRatio: " + aspectRatio);
+    if (
+        isFurtherThan(aspectRatio, 0, scaleLimit)
+        && (aspectRatio < 33)
+        && (aspectRatio > -33)
+    ) {
+      println ("scale good.");
       scale.x = x;
-    }
-    if (y != 0) {
       scale.y = y;
     }
+  }
+
+  boolean isFurtherThan(float a, float b, float range) {
+    return (abs(a - b) > range);
   }
   
   void setWorld(FWorld world) {
@@ -73,6 +80,9 @@ class PolygonController {
     return poly;
   }
   
+  /**
+   * You MUST call updateShape before the new PolygonController is usable.
+   */
   void updateShape() {
     int sideCount = numSides;
     float[][] vertices = new float[sideCount][2]; //[n][0] = x, [n][1] = y

@@ -14,7 +14,7 @@ ArrayList<PolygonController> shapes;
 int numSides = 3;
 int minSides = 3;
 PVector scale;
-float scaleAdjustFactor = 0.25;
+float scaleAdjustFactor = 0.1;
 boolean shiftDown = false;
 
 void setup() {
