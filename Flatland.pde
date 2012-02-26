@@ -16,7 +16,13 @@ int minSides = 3;
 PVector scale;
 PVector up;
 float scaleAdjustFactor = 0.1;
-boolean shiftDown = false;
+float movementForce = 1000000;
+
+boolean scaleModKeyDown = false;
+boolean upKeyDown = false;
+boolean downKeyDown = false;
+boolean leftKeyDown = false;
+boolean rightKeyDown = false;
 
 static final char CENTER_KEY = 'c';
 static final char UP_KEY = 'w';
@@ -62,6 +68,23 @@ void draw() {
   world.step();
   world.draw(this);  
 
+  //Set movement forces
+  float xForce = 0;
+  float yForce = 0;
+
+  if (upKeyDown) {
+    yForce = -movementForce;
+  } else if (downKeyDown) {
+    yForce = movementForce;
+  }
+
+  if (rightKeyDown) {
+    xForce = movementForce;
+  } else if (leftKeyDown) {
+    xForce = -movementForce;
+  }
+
+  player.setForce(xForce, yForce);
   player.update(mouseX, mouseY);
 }
 
@@ -70,7 +93,7 @@ void draw() {
  */
 void mouseWheel(int delta) {
   //println(delta); 
-  if (shiftDown) {
+  if (scaleModKeyDown) {
     scale.y += delta * scaleAdjustFactor;
   } else {
     scale.x += delta * scaleAdjustFactor;
@@ -82,15 +105,17 @@ void mouseWheel(int delta) {
 void keyPressed() {
   if (CODED == key) {
     if (SCALE_MOD_KEY == keyCode) {
-      shiftDown = true;
+      scaleModKeyDown = true;
     }
   } else {
     if (UP_KEY == key) {
-      player.getPoly().addForce(1000, 0);
-      println("add force up");
+      upKeyDown = true;
     } else if (DOWN_KEY == key) {
+      downKeyDown = true;
     } else if (LEFT_KEY == key) {
+      leftKeyDown = true;
     } else if (RIGHT_KEY == key) {
+      rightKeyDown = true;
     } else if (CENTER_KEY == key) {
       scale.x = 1;
       scale.y = 1;
@@ -148,11 +173,17 @@ void keyPressed() {
 void keyReleased() {
   if (CODED == key) {
     if (SHIFT == keyCode) {
-      shiftDown = false;
+      scaleModKeyDown = false;
+    }
+  } else {
+    if (UP_KEY == key) {
+      upKeyDown = false;
+    } else if (DOWN_KEY == key) {
+      downKeyDown = false;
+    } else if (LEFT_KEY == key) {
+      leftKeyDown = false;
+    } else if (RIGHT_KEY == key) {
+      rightKeyDown = false;
     }
   }
 }
-
-
-
-

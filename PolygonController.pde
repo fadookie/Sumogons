@@ -85,6 +85,10 @@ class PolygonController {
   boolean isFurtherThan(float a, float b, float range) {
     return (abs(a - b) > range);
   }
+
+  void setForce(float fx, float fy) {
+    poly.setForce(fx, fy);
+  }
   
   void setWorld(FWorld world) {
     this.world = world;
