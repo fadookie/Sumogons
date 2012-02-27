@@ -32,7 +32,7 @@ static final char RIGHT_KEY = 'd';
 static final char SCALE_MOD_KEY = SHIFT;
 
 void setup() {
-  size(800, 600);
+  size(1024, 768);
   smooth();
   
   shapes = new ArrayList<PolygonController>();
@@ -46,6 +46,7 @@ void setup() {
 
   Fisica.init(this);
 
+  //Make the world
   world = new FWorld();
   world.setGrabbable(false);
   world.setGravity(0, 0);
@@ -53,14 +54,18 @@ void setup() {
   //world.remove(world.left);
   //world.remove(world.right);
   //world.remove(world.top);
-  
   world.setEdgesRestitution(0.5);
 
+  //Make the player
   player = new PlayerController(numSides, 50.0, world);
   player.setPosition(width / 2, height / 2);
-  player.setWorld(world);
   player.setScale(scale.x, scale.y);
   player.updateShape();
+
+  //Make an enemy
+  EnemyController enemy = new EnemyController(6, 50.0, world);
+  enemy.setPosition(width/3, height/3);
+  enemy.updateShape();
 }
 
 void draw() {

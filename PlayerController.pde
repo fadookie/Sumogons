@@ -1,6 +1,5 @@
 class PlayerController extends PolygonController {
   PVector mousePosition;
-  static final float turnSpeed = 7;
 
   PlayerController(int numSides, float radius) {
     super(numSides, radius);
