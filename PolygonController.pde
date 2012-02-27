@@ -154,7 +154,6 @@ class PolygonController {
     }
     
     Polygon oldPoly = poly;
-    getPosition();
 
     //Build new physics body
     poly = new Polygon();
@@ -164,7 +163,16 @@ class PolygonController {
     poly.setRestitution(0.5);
     if (null != oldPoly) {
       //Copy the physics properties that are likely to be different from the old body.
-      poly.setPosition(oldPoly.getX(), oldPoly.getY());
+      PVector oldPosition = workVectorC;
+      oldPosition.x = oldPoly.getX();
+      oldPosition.y = oldPoly.getY();
+      
+      if ((oldPosition.x == 0) && (oldPosition.y == 0)) {
+        oldPosition = position;
+      }
+
+      poly.setPosition(oldPosition.x, oldPosition.y);
+      println("oldPosition: " + oldPoly.getX() + ", " + oldPoly.getY());
       poly.setRotation(oldPoly.getRotation());
       poly.setAngularVelocity(oldPoly.getAngularVelocity());
       poly.setForce(oldPoly.getForceX(), oldPoly.getForceY());
@@ -176,7 +184,7 @@ class PolygonController {
     poly.setSideCount(numSides);
 
     for (int vertexNum = 0; vertexNum < sideCount; vertexNum++) {
-      PVector coords;// = workVectorC;
+      PVector coords;
       float x = vertices[vertexNum][0]; 
       float y = vertices[vertexNum][1];
 
