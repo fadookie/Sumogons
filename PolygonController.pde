@@ -109,22 +109,21 @@ class PolygonController {
   void setRelativeForce(float fx, float fy) {
     PVector headingNormal = getHeadingNormal();
     getHeading();
-    return;
     //Apply transformations
     //[a c
     // b d]
-//    workVectorA.x = scale.x; //a
-//    workVectorA.y = 0; //b
-//
-//    workVectorB.x = 0; //c
-//    workVectorB.y = scale.y; //d
+    workVectorA.x = heading.x; //a
+    workVectorA.y = heading.y; //b
+
+    workVectorB.x = headingNormal.x; //c
+    workVectorB.y = headingNormal.y; //d
 
     //x(a,b) + y(c,d)
-//    workVectorA.mult(x);
-//    workVectorB.mult(y);
-//    coords = PVector.add(workVectorA, workVectorB); //If this adds too much garbage, try instance .add() on another work vector
-//
-//    poly.setForce(fx, fy);
+    workVectorA.mult(fx);
+    workVectorB.mult(fy);
+    PVector force = PVector.add(workVectorA, workVectorB); //If this adds too much garbage, try instance .add() on another work vector
+
+    poly.setForce(force.x, force.y);
   }
   
   void setWorld(FWorld world) {

@@ -18,7 +18,7 @@ PVector up;
 float scaleAdjustFactor = 0.1;
 float movementForce = 1000000;
 
-static final boolean DEBUG = true;
+static final boolean DEBUG = false;
 
 boolean scaleModKeyDown = false;
 boolean upKeyDown = false;
@@ -92,7 +92,7 @@ void draw() {
     xForce = -movementForce;
   }
 
-  player.setForce(xForce, yForce);
+  player.setRelativeForce(xForce, yForce);
   player.update(mouseX, mouseY);
 }
 
