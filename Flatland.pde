@@ -47,6 +47,7 @@ void setup() {
   Fisica.init(this);
 
   world = new FWorld();
+  world.setGrabbable(false);
   world.setGravity(0, 0);
   world.setEdges();
   //world.remove(world.left);
