@@ -18,6 +18,8 @@ PVector up;
 float scaleAdjustFactor = 0.1;
 float movementForce = 1000000;
 
+static final boolean DEBUG = true;
+
 boolean scaleModKeyDown = false;
 boolean upKeyDown = false;
 boolean downKeyDown = false;
@@ -33,7 +35,7 @@ static final char SCALE_MOD_KEY = SHIFT;
 
 void setup() {
   size(1024, 768);
-  smooth();
+  //smooth();
   
   shapes = new ArrayList<PolygonController>();
   scale = new PVector(1,1);

@@ -68,6 +68,10 @@ class PolygonController {
     return heading;
   }
 
+  PVector getHeadingNormal() {
+    return PMath.rotatePVector2D(heading, radians(90));
+  }
+
   void setNumSides(int n) {
     numSides = n;
   }
@@ -100,6 +104,27 @@ class PolygonController {
 
   void setForce(float fx, float fy) {
     poly.setForce(fx, fy);
+  }
+
+  void setRelativeForce(float fx, float fy) {
+    PVector headingNormal = getHeadingNormal();
+    getHeading();
+    return;
+    //Apply transformations
+    //[a c
+    // b d]
+//    workVectorA.x = scale.x; //a
+//    workVectorA.y = 0; //b
+//
+//    workVectorB.x = 0; //c
+//    workVectorB.y = scale.y; //d
+
+    //x(a,b) + y(c,d)
+//    workVectorA.mult(x);
+//    workVectorB.mult(y);
+//    coords = PVector.add(workVectorA, workVectorB); //If this adds too much garbage, try instance .add() on another work vector
+//
+//    poly.setForce(fx, fy);
   }
   
   void setWorld(FWorld world) {

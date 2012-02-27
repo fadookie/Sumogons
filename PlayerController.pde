@@ -28,6 +28,24 @@ class PlayerController extends PolygonController {
       float angleBetween = -PVector.dot(lookAt, heading);
 
       poly.setAngularVelocity(angleBetween * turnSpeed);
+
+      if (DEBUG) {
+        getHeading();
+        getPosition();
+        PVector headingNormal = getHeadingNormal();
+        pushStyle();
+        strokeWeight(2);
+        pushStyle();
+        stroke(0, 255, 0);
+        line(position.x, position.y, position.x + heading.x * 50, position.y + heading.y * 50);
+        popStyle();
+        pushStyle();
+        stroke(255, 0, 0);
+        line(position.x, position.y, position.x + headingNormal.x * 50, position.y + headingNormal.y * 50);
+        popStyle();
+        popStyle();
+        println("heading: " + heading + " headingNormal: " + headingNormal);
+      }
     }
   }
 }
