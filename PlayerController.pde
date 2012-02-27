@@ -1,5 +1,6 @@
 class PlayerController extends PolygonController {
   PVector mousePosition;
+  static final float turnSpeed = 7;
 
   PlayerController(int numSides, float radius) {
     super(numSides, radius);
@@ -23,10 +24,11 @@ class PlayerController extends PolygonController {
       PVector pos = getPosition();
       PVector lookAt = PVector.sub(pos, mousePosition); //FIXME: Use workvector placeholders if this creates too much garbage
       lookAt.normalize();
+      getHeading(); //update this.heading
 
-      //see http://www.euclideanspace.com/maths/algebra/vectors/angleBetween/index.htm
-      float angle = atan2(lookAt.y, lookAt.x) - atan2(up.y, up.x);
-      poly.setRotation(angle);
+      float angleBetween = -PVector.dot(lookAt, heading);
+
+      poly.setAngularVelocity(angleBetween * turnSpeed);
     }
   }
 }

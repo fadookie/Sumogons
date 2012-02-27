@@ -6,6 +6,7 @@ class PolygonController {
   PVector defaultScale;
   PVector scale;
   PVector position;
+  PVector heading;
   static final float polyCalcRotationOffset = -1.5707964; //Rotation offset when creating the polygon so it 'points' at the cursor. -1.5707964 rads = -90 degrees.
   static final float scaleLimit = 0.02; //The distance the scale on any axis is allowed to be from 0, if it gets too close to 0 it causes the physics engine to glitch
 
@@ -26,6 +27,7 @@ class PolygonController {
     defaultScale = new PVector(1,1);
     scale = new PVector(1,1);
     position = new PVector();
+    heading = new PVector();
 
     workVectorA = new PVector();
     workVectorB = new PVector();
@@ -54,6 +56,15 @@ class PolygonController {
       position.y = poly.getY();
     }
     return position;
+  }
+
+  PVector getHeading() {
+    if (null != poly) {
+      float rotation = poly.getRotation();
+      heading.x = cos(rotation);
+      heading.y = sin(rotation);
+    }
+    return heading;
   }
 
   void setNumSides(int n) {
