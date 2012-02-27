@@ -11,6 +11,7 @@ import fisica.*;
 FWorld world;
 PlayerController player;
 ArrayList<PolygonController> shapes;
+ArrayList<EnemyController> enemies;
 int numSides = 3;
 int minSides = 3;
 PVector scale;
@@ -38,6 +39,7 @@ void setup() {
   //smooth();
   
   shapes = new ArrayList<PolygonController>();
+  enemies = new ArrayList<EnemyController>();
   scale = new PVector(1,1);
   up = new PVector(0, 1);
 
@@ -68,6 +70,7 @@ void setup() {
   EnemyController enemy = new EnemyController(6, 50.0, world);
   enemy.setPosition(width/3, height/3);
   enemy.updateShape();
+  enemies.add(enemy);
 }
 
 void draw() {
@@ -176,6 +179,15 @@ void keyPressed() {
       }
     } 
   }
+}
+
+EnemyController findEnemy(FBody b) {
+  for (EnemyController enemy : enemies) {
+    if (enemy.getPoly() == b) {
+      return enemy;
+    }
+  }
+  return null;
 }
 
 void keyReleased() {

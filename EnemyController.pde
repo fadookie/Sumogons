@@ -12,6 +12,7 @@ class EnemyController extends PolygonController {
   }
 
   void construct() {
+    invincible = false;
   }
 
   void update() {

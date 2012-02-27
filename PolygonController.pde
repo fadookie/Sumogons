@@ -8,6 +8,9 @@ class PolygonController {
   PVector position;
   PVector heading;
   float turnSpeed = 7;
+  boolean invincible = true;
+  int health = 50;
+
   static final float polyCalcRotationOffset = -1.5707964; //Rotation offset when creating the polygon so it 'points' at the cursor. -1.5707964 rads = -90 degrees.
   static final float scaleLimit = 0.02; //The distance the scale on any axis is allowed to be from 0, if it gets too close to 0 it causes the physics engine to glitch
 
@@ -137,6 +140,10 @@ class PolygonController {
   
   FPoly getPoly() {
     return poly;
+  }
+
+  boolean isInvincible() {
+    return invincible;
   }
   
   /**

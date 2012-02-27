@@ -13,10 +13,13 @@ class PlayerController extends PolygonController {
 
   void construct() {
     mousePosition = new PVector();
+    invincible = false;
   }
 
   void update(float mousex, float mousey) {
     if (null != poly) {
+
+      //Calculate & apply rotation
       mousePosition.x = mousex;
       mousePosition.y = mousey;
 
@@ -28,6 +31,20 @@ class PlayerController extends PolygonController {
       float angleBetween = -PVector.dot(lookAt, heading);
 
       poly.setAngularVelocity(angleBetween * turnSpeed);
+
+      //Collision detection
+      ArrayList<FContact> contacts = poly.getContacts();
+      for (FContact c : contacts) {
+        EnemyController enemy = findEnemy(c.getBody2());
+        if (null == enemy) {
+          //That wasn't it, let's try the first body...
+          enemy = findEnemy(c.getBody1());
+        }
+        if (null != enemy) {
+          line(c.getBody1().getX(), c.getBody1().getY(), c.getBody2().getX(), c.getBody2().getY());
+        }
+      }
+
 
       if (DEBUG) {
         getHeading();
