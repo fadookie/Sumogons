@@ -1,6 +1,7 @@
 class EnemyController extends PolygonController {
   float turnSpeed = 4;
   float patrolRadius = 5;
+  Path path;
 
   EnemyController(int numSides, float radius) {
     super(numSides, radius);
@@ -14,6 +15,12 @@ class EnemyController extends PolygonController {
 
   void construct() {
     invincible = false;
+    path = new Path();
+    path.add(new PVector(0, height/2));
+    path.add(new PVector(width/2, height));
+    path.add(new PVector(width, height/2));
+    path.add(new PVector(width/2, 0));
+    path.add(new PVector(0, height/2));
   }
 
   void update() {
@@ -22,10 +29,10 @@ class EnemyController extends PolygonController {
     if (null != poly) {
       //Patrol
       float velocityX, velocityY;
-      velocityX = cos(deltaTime) * patrolRadius * movementForce; //movementCenterX + sin(counter) * moveRadius;
-      velocityY = sin(deltaTime) * patrolRadius * movementForce; //movementCenterY + cos(counter) * moveRadius;
+      velocityX = cos(deltaTime) * patrolRadius * (movementForce / 2); //movementCenterX + sin(counter) * moveRadius;
+      velocityY = sin(deltaTime) * patrolRadius * (movementForce / 2); //movementCenterY + cos(counter) * moveRadius;
       setForce(velocityX, velocityY);
-      println(this + " setForce("+velocityX+", "+velocityY+")");
+      //println(this + " setForce("+velocityX+", "+velocityY+")");
 
       //Look at the player
       PVector playerPosition = player.getPosition();
@@ -39,5 +46,10 @@ class EnemyController extends PolygonController {
 
       poly.setAngularVelocity(angleBetween * turnSpeed);
     }
+
+  }
+
+  void drawPath() {
+    path.draw();
   }
 }

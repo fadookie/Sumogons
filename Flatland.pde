@@ -14,18 +14,20 @@ ArrayList<PolygonController> shapes;
 ArrayList<EnemyController> enemies;
 int numSides = 3;
 int minSides = 3;
-PVector scale;
+PVector scale; //Scale of the player & newly spawned debug objects
 PVector up;
 float scaleAdjustFactor = 0.1;
 float movementForce = 1000000;
 
-static final boolean DEBUG = false;
+static final boolean DEBUG = true;
 
 boolean scaleModKeyDown = false;
 boolean upKeyDown = false;
 boolean downKeyDown = false;
 boolean leftKeyDown = false;
 boolean rightKeyDown = false;
+
+boolean disableEnemyUpdate = false;
 
 static final char CENTER_KEY = 'c';
 static final char UP_KEY = 'w';
@@ -52,7 +54,7 @@ void setup() {
 
   //Make the world
   world = new FWorld();
-  world.setGrabbable(false);
+  world.setGrabbable(DEBUG); //Only allow mouse grabbing in debug mode
   world.setGravity(0, 0);
   world.setEdges();
   //world.remove(world.left);
@@ -79,6 +81,13 @@ void draw() {
   world.step();
   world.draw(this);  
 
+  //Debug draw
+  if (DEBUG) {
+    for (EnemyController enemy : enemies) {
+      enemy.drawPath();
+    }
+  }
+
   //Set movement forces
   float xForce = 0;
   float yForce = 0;
@@ -98,8 +107,10 @@ void draw() {
   player.setRelativeForce(xForce, yForce);
   player.update(mouseX, mouseY);
 
-  for (EnemyController enemy : enemies) {
-    enemy.update();
+  if (!disableEnemyUpdate) {
+    for (EnemyController enemy : enemies) {
+      enemy.update();
+    }
   }
 
 }
@@ -140,6 +151,11 @@ void keyPressed() {
       //println("resetting scale");
 
     //DEBUG keys
+    } else if ('p' == key) {
+      if (DEBUG) {
+        disableEnemyUpdate = !disableEnemyUpdate;
+        println(disableEnemyUpdate);
+      }
     } else if ('=' == key) {
       numSides++;
       player.setNumSides(numSides);

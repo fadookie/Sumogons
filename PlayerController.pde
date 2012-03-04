@@ -63,7 +63,7 @@ class PlayerController extends PolygonController {
         line(position.x, position.y, position.x + headingNormal.x * 50, position.y + headingNormal.y * 50);
         popStyle();
         popStyle();
-        println("heading: " + heading + " headingNormal: " + headingNormal);
+        //println("heading: " + heading + " headingNormal: " + headingNormal);
       }
     }
   }

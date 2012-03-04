@@ -184,7 +184,7 @@ class PolygonController {
       }
 
       poly.setPosition(oldPosition.x, oldPosition.y);
-      println("oldPosition: " + oldPoly.getX() + ", " + oldPoly.getY());
+      //println("oldPosition: " + oldPoly.getX() + ", " + oldPoly.getY());
       poly.setRotation(oldPoly.getRotation());
       poly.setAngularVelocity(oldPoly.getAngularVelocity());
       poly.setForce(oldPoly.getForceX(), oldPoly.getForceY());
