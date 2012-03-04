@@ -66,10 +66,11 @@ void setup() {
   player = new PlayerController(numSides, 50.0, world);
   player.setPosition(width / 2, height / 2);
   player.setScale(scale.x, scale.y);
+  player.setFill(new PVector(255, 0, 0));
   player.updateShape();
 
   //Make an enemy
-  EnemyController enemy = new EnemyController(6, 50.0, world);
+  EnemyController enemy = new EnemyController(3, 50.0, world);
   enemy.setPosition(width/3, height/3);
   enemy.updateShape();
   enemies.add(enemy);

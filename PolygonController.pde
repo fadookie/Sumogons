@@ -10,6 +10,7 @@ class PolygonController {
   float turnSpeed = 7;
   boolean invincible = true;
   int health = 50;
+  PVector fillColor;
 
   /** Time delta since last update in milliseconds */
   float deltaTime = 0; 
@@ -37,6 +38,7 @@ class PolygonController {
     scale = new PVector(1,1);
     position = new PVector();
     heading = new PVector();
+    fillColor = new PVector(120, 30, 90);
 
     workVectorA = new PVector();
     workVectorB = new PVector();
@@ -142,6 +144,11 @@ class PolygonController {
     world.add(poly);
     //println("added " + this + " to world.");
   }
+
+  //Workaround for color passing to fisica being buggy
+  void setFill(PVector newColor) {
+    fillColor = newColor;
+  }
   
   FPoly getPoly() {
     return poly;
@@ -170,7 +177,7 @@ class PolygonController {
     //Build new physics body
     poly = new Polygon();
     poly.setStrokeWeight(3);
-    poly.setFill(120, 30, 90);
+    poly.setFill(fillColor.x, fillColor.y, fillColor.z);
     poly.setDensity(10);
     poly.setRestitution(0.5);
     if (null != oldPoly) {

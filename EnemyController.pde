@@ -6,6 +6,7 @@ class EnemyController extends PolygonController {
   int nextPathNodeIndex = 0;
   static final float targetNodeDistance = 150.0;
   float enemyMovementForce;
+  boolean attackPlayer = true; //Pursue the player?
 
   EnemyController(int numSides, float radius) {
     super(numSides, radius);
@@ -21,10 +22,11 @@ class EnemyController extends PolygonController {
     invincible = false;
     enemyMovementForce = movementForce / 350;
     path = new Path();
-    path.add(new PVector(0, height/2));
-    path.add(new PVector(width/2, height));
-    path.add(new PVector(width, height/2));
-    path.add(new PVector(width/2, 0));
+    //No auto-path for now. Might never use it.
+    //path.add(new PVector(0, height/2));
+    //path.add(new PVector(width/2, height));
+    //path.add(new PVector(width, height/2));
+    //path.add(new PVector(width/2, 0));
   }
 
   void update() {
@@ -66,7 +68,7 @@ class EnemyController extends PolygonController {
 
       float angleBetween = -PVector.dot(lookAt, heading);
 
-      //poly.setAngularVelocity(angleBetween * turnSpeed);
+      poly.setAngularVelocity(angleBetween * turnSpeed);
     }
 
   }
