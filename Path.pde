@@ -100,19 +100,19 @@ class Path {
 
   //Draw path
   void draw() {
-    println("draw begin @ " + points.size());
+    //println("draw begin @ " + points.size());
     pushStyle();
     stroke(color(255, 0, 0));
     strokeWeight(2);
     strokeJoin(ROUND);
 
     for (int i = 0; i < (points.size() - 2); i++) {
-      println("draw " + i + "/" + points.size());
+      //println("draw " + i + "/" + points.size());
       PVector currentVector = points.get(i);
       PVector nextVector = points.get(i+1);
       PVector thirdVector = points.get(i+2);
       line(currentVector.x, currentVector.y, nextVector.x, nextVector.y);
-      println("line(" + currentVector.x + "," + currentVector.y + "," + nextVector.x + "," + nextVector.y + ")");
+      //println("line(" + currentVector.x + "," + currentVector.y + "," + nextVector.x + "," + nextVector.y + ")");
       line(nextVector.x, nextVector.y, thirdVector.x, thirdVector.y);
     }
     popStyle();
