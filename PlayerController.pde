@@ -17,6 +17,8 @@ class PlayerController extends PolygonController {
   }
 
   void update(float mousex, float mousey) {
+    super.update();
+
     if (null != poly) {
 
       //Calculate & apply rotation

@@ -1,5 +1,6 @@
 class EnemyController extends PolygonController {
   float turnSpeed = 4;
+  float patrolRadius = 5;
 
   EnemyController(int numSides, float radius) {
     super(numSides, radius);
@@ -16,7 +17,17 @@ class EnemyController extends PolygonController {
   }
 
   void update() {
+    super.update();
+
     if (null != poly) {
+      //Patrol
+      float velocityX, velocityY;
+      velocityX = cos(deltaTime) * patrolRadius * movementForce; //movementCenterX + sin(counter) * moveRadius;
+      velocityY = sin(deltaTime) * patrolRadius * movementForce; //movementCenterY + cos(counter) * moveRadius;
+      setForce(velocityX, velocityY);
+      println(this + " setForce("+velocityX+", "+velocityY+")");
+
+      //Look at the player
       PVector playerPosition = player.getPosition();
 
       PVector pos = getPosition();

@@ -97,6 +97,11 @@ void draw() {
 
   player.setRelativeForce(xForce, yForce);
   player.update(mouseX, mouseY);
+
+  for (EnemyController enemy : enemies) {
+    enemy.update();
+  }
+
 }
 
 /**
