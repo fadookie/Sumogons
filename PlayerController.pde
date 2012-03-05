@@ -28,19 +28,15 @@ class PlayerController extends PolygonController {
     input = newInput;
   }
 
-  void update(float mousex, float mousey) {
+  void update() {
     super.update();
 
     if (null != poly) {
 
       //Calculate & apply rotation
-      mousePosition.x = mousex;
-      mousePosition.y = mousey;
-
-      PVector pos = getPosition();
-      PVector lookAt = PVector.sub(pos, mousePosition); //FIXME: Use workvector placeholders if this creates too much garbage
-      lookAt.normalize();
       getHeading(); //update this.heading
+
+      PVector lookAt = input.heading;
 
       float angleBetween = -PVector.dot(lookAt, heading);
 

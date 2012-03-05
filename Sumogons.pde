@@ -19,8 +19,13 @@ int numSides = 3;
 int minSides = 3;
 PVector scale; //Scale of the player & newly spawned debug objects
 PVector up;
+PVector down;
+PVector left;
+PVector right;
 float scaleAdjustFactor = 0.1;
 float movementForce = 1000000;
+
+PVector gWorkVectorA;
 
 static final boolean DEBUG = true;
 
@@ -34,7 +39,11 @@ void setup() {
   enemies = new ArrayList<EnemyController>();
   scale = new PVector(1,1);
   up = new PVector(0, 1);
+  down = new PVector(0, -1);
+  left = new PVector(1, 0);
+  right = new PVector(-1, 0);
   players = new PlayerController[numPlayers];
+  gWorkVectorA = new PVector();
 
   addMouseWheelListener(new java.awt.event.MouseWheelListener() { 
     public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) { 
@@ -69,6 +78,7 @@ void setup() {
     input.LEFT_KEY = new Key(LEFT, true);
     input.RIGHT_KEY = new Key(RIGHT, true);
     input.SCALE_MOD_KEY = new Key(ALT, true);
+    input.useMouse = true;
 
     player.setInput(input);
 
@@ -91,6 +101,8 @@ void setup() {
     input.LEFT_KEY = new Key('a');
     input.RIGHT_KEY = new Key('d');
     input.SCALE_MOD_KEY = new Key(SHIFT, true);
+    input.TURN_LEFT_KEY = new Key('j');
+    input.TURN_RIGHT_KEY = new Key('l');
 
     player.setInput(input);
 
@@ -117,12 +129,34 @@ void draw() {
     }
   }
 
-  //Set movement forces
-  float xForce = 0;
-  float yForce = 0;
-
   for (PlayerController player : players) {
+  //for (int i = 0; i < players.length; i++) {
+  //  PlayerController player = players[i];
     Input input = player.getInput();
+
+    if (player.input.useMouse) {
+      PVector mousePosition = gWorkVectorA;
+      mousePosition.x = mouseX;
+      mousePosition.y = mouseY;
+
+      PVector pos = player.getPosition();
+      PVector lookAt = PVector.sub(pos, mousePosition); //FIXME: Use workvector placeholders if this creates too much garbage
+      lookAt.normalize();
+
+      input.heading = lookAt;
+    } else {
+      //Process rotation keys if we're not using mouselook
+      if (input.turnLeftKeyDown) {
+        input.heading = left.get();
+      } else if (input.turnRightKeyDown) {
+        input.heading = right.get();
+      }
+    }
+
+
+    //Set movement forces
+    float xForce = 0;
+    float yForce = 0;
 
     if (input.upKeyDown) {
       yForce = -movementForce;
@@ -146,7 +180,7 @@ void draw() {
     }
 
     player.setRelativeForce(xForce, yForce);
-    player.update(mouseX, mouseY);
+    player.update();
   }
 
   if (!disableEnemyUpdate) {
