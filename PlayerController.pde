@@ -1,5 +1,6 @@
 class PlayerController extends PolygonController {
   PVector mousePosition;
+  Input input;
 
   PlayerController(int numSides, float radius) {
     super(numSides, radius);
@@ -14,6 +15,17 @@ class PlayerController extends PolygonController {
   void construct() {
     mousePosition = new PVector();
     invincible = false;
+    input = new Input();
+  }
+
+  Input getInput() {
+    //If better encapsulation / gurantee of non-mutation is needed, change this call to return a copy, eg:
+    //return new Input(input);
+    return input;
+  }
+  
+  void setInput(Input newInput) {
+    input = newInput;
   }
 
   void update(float mousex, float mousey) {
