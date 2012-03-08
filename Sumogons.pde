@@ -167,10 +167,14 @@ void draw() {
     if ("1" == player.tag) {
       if (input.rightKeyDown) {
         println("RIGHT");
-        input.heading = PMath.rotatePVector2DDebug(player.getHeading(), radians(player.turnAmount));
+        input.rotation = radians(player.turnMagnitude);
+        //input.heading = PMath.rotatePVector2DDebug(player.getHeading(), radians(player.turnAmount));
       } else if (input.leftKeyDown) {
         println("LEFT");
-        input.heading = PMath.rotatePVector2DDebug(player.getHeading(), radians(-player.turnAmount));
+        input.rotation = radians(-player.turnMagnitude);
+        //input.heading = PMath.rotatePVector2DDebug(player.getHeading(), radians(-player.turnAmount));
+      } else {
+        input.rotation = radians(0);
       }
     }
 
@@ -183,7 +187,7 @@ void draw() {
       scale.y = 1;
     }
 
-    player.setForce(xForce, yForce);
+    player.setRelativeForce(xForce, yForce);
     player.update();
   }
 

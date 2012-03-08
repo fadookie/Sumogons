@@ -1,7 +1,7 @@
 class PlayerController extends PolygonController {
   PVector mousePosition;
   Input input;
-  float turnAmount = 4;
+  float turnMagnitude = 135;
 
   PlayerController(int numSides, float radius) {
     super(numSides, radius);
@@ -37,11 +37,7 @@ class PlayerController extends PolygonController {
       //Calculate & apply rotation
       getHeading(); //update this.heading
 
-      PVector lookAt = input.heading;
-
-      float angleBetween = -PVector.dot(lookAt, this.heading);
-
-      poly.setAngularVelocity(angleBetween * turnSpeed);
+      poly.setAngularVelocity(input.rotation);
 
       //Collision detection
       ArrayList<FContact> contacts = poly.getContacts();

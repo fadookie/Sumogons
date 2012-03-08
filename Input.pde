@@ -11,6 +11,7 @@ class Input {
   boolean scaleModKeyDown = false;
 
   PVector heading;
+  float rotation;
 
   Key CENTER_KEY;
   Key UP_KEY;
