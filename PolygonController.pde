@@ -12,6 +12,9 @@ class PolygonController {
   int health = 50;
   PVector fillColor;
   String tag;
+  static final float centerDotRadius = 3;
+  boolean isStatic = false;
+  float density = 10;
 
   /** Time delta since last update in milliseconds */
   float deltaTime = 0; 
@@ -143,6 +146,10 @@ class PolygonController {
   void setWorld(FWorld world) {
     this.world = world;
   }
+
+  void setStatic(boolean s) {
+    isStatic = s;
+  }
   
   void addToWorld() {
     world.add(poly);
@@ -162,6 +169,9 @@ class PolygonController {
     return invincible;
   }
   
+  void setDensity(float _density) {
+    density = _density;
+  }
   /**
    * You MUST call updateShape before the new PolygonController is usable.
    */
@@ -183,8 +193,9 @@ class PolygonController {
     poly.setBullet(true);
     poly.setStrokeWeight(3);
     poly.setFill(fillColor.x, fillColor.y, fillColor.z);
-    poly.setDensity(10);
+    poly.setDensity(density);
     poly.setRestitution(0.5);
+    poly.setStatic(isStatic);
     if (null != oldPoly) {
       //Copy the physics properties that are likely to be different from the old body.
       PVector oldPosition = workVectorC;
@@ -242,5 +253,13 @@ class PolygonController {
   }
 
   void draw() {
+  }
+
+  String toString() {
+    if (null != tag) {
+      return tag;
+    } else {
+      return super.toString();
+    }
   }
 }

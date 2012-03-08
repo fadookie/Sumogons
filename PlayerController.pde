@@ -55,6 +55,13 @@ class PlayerController extends PolygonController {
   }
 
   void draw() {
+    getPosition();
+
+    pushStyle();
+    fill(0);
+    ellipse(position.x, position.y, centerDotRadius, centerDotRadius);
+    popStyle();
+
     if (DEBUG) {
       getHeading();
       getPosition();

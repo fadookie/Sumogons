@@ -5,20 +5,18 @@ class PlayState extends GameState {
     world = new FWorld();
     world.setGrabbable(DEBUG); //Only allow mouse grabbing in debug mode
     world.setGravity(0, 0);
-    world.setEdges();
-    //world.remove(world.left);
-    //world.remove(world.right);
-    //world.remove(world.top);
     world.setEdgesRestitution(0.5);
+
+    ellipseMode(RADIUS);
 
     {
       //Make player 0
-      PlayerController player = new PlayerController(numSides, 50.0, world);
-      player.setPosition(width / 2, height / 2);
+      PlayerController player = new PlayerController(playerSides[0], 50.0, world);
+      player.setPosition((width / 2) - 100, (height / 2) - 100);
       player.setScale(scale.x, scale.y);
       player.setFill(new PVector(255, 0, 0));
       player.updateShape();
-      player.tag = "0";
+      player.tag = "Red";
 
       Input input = player.getInput();
 
@@ -41,12 +39,12 @@ class PlayState extends GameState {
 
     {
       //Make player 1
-      PlayerController player = new PlayerController(numSides, 50.0, world);
+      PlayerController player = new PlayerController(playerSides[1], 50.0, world);
       player.setPosition((width / 2) + 100, (height / 2) + 100);
       player.setScale(scale.x, scale.y);
       player.setFill(new PVector(0, 0, 255));
       player.updateShape();
-      player.tag = "1";
+      player.tag = "Blue";
 
       Input input = player.getInput();
 
@@ -65,6 +63,17 @@ class PlayState extends GameState {
 
       players[1] = player;
     }
+
+    //Obstacle
+    PolygonController poly = new PolygonController(4, 25.0, world);
+    poly.setPosition(width / 2, height / 2);
+    poly.setScale(scale.x, scale.y);
+    poly.tag = "peg";
+    //poly.setStatic(true);
+    poly.setDensity(9999999999.0);
+    poly.updateShape();
+
+    shapes.add(poly);
 
     //Make an enemy
     //EnemyController enemy = new EnemyController(3, 50.0, world);
@@ -154,21 +163,38 @@ class PlayState extends GameState {
         enemy.update();
       }
     }
+
+    //Check for win condition
+    for (PlayerController player : players) {
+      PVector position = player.getPosition();
+      if (
+          (position.x > width) ||
+          (position.x < 0) ||
+          (position.y > height) ||
+          (position.y < 0)
+         ) {
+        println(width + "," + height);
+        println(position);
+        engineChangeState(new InterstitialState(player + " loses!", new PlayState()));
+      }
+    }
+
+    world.step();
   }
 
   void draw() {
     background(255);
 
-    world.step();
     world.draw(getMainInstance());  
+
+    for (PlayerController player : players) {
+      player.draw();
+    }
 
     //Debug draw
     if (DEBUG) {
       for (EnemyController enemy : enemies) {
         enemy.drawPath();
-      }
-      for (PlayerController player : players) {
-        player.draw();
       }
     }
   }

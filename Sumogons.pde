@@ -11,8 +11,11 @@ import fisica.*;
 Stack states;
 FWorld world;
 PlayerController[] players;
+int[] playerSides;
 ArrayList<PolygonController> shapes;
 ArrayList<EnemyController> enemies;
+PFont omnesSem48;
+ArrayList<String> leaderboard;
 
 int numPlayers = 2;
 
@@ -29,13 +32,13 @@ float movementForce = 1000000;
 //Re-using some PVector objects to reduce garbage during calcs in a tight loop
 PVector gWorkVectorA;
 
-static final boolean DEBUG = true;
+static final boolean DEBUG = false;
 
 boolean disableEnemyUpdate = false;
 
 void setup() {
   size(1024, 768);
-  //smooth();
+  smooth();
   
   states = new Stack();
   shapes = new ArrayList<PolygonController>();
@@ -46,7 +49,9 @@ void setup() {
   left = new PVector(1, 0);
   right = new PVector(-1, 0);
   players = new PlayerController[numPlayers];
+  playerSides = new int[numPlayers];
   gWorkVectorA = new PVector();
+  omnesSem48  = loadFont("Omnes-Semibold-48.vlw");
 
   /* //Not using mouse ATM
   addMouseWheelListener(new java.awt.event.MouseWheelListener() { 
@@ -58,7 +63,7 @@ void setup() {
   Fisica.init(this);
 
   //Begin initial game state
-  engineChangeState(new PlayState());
+  engineChangeState(new NewGameState());
 }
 
 /**
