@@ -6,8 +6,10 @@ class Input {
   boolean downKeyDown = false;
   boolean leftKeyDown = false;
   boolean rightKeyDown = false;
-  boolean turnLeftKeyDown = false;
-  boolean turnRightKeyDown = false;
+  boolean scaleXNegativeKeyDown = false;
+  boolean scaleXPositiveKeyDown = false;
+  boolean scaleYNegativeKeyDown = false;
+  boolean scaleYPositiveKeyDown = false;
   boolean scaleModKeyDown = false;
 
   PVector heading;
@@ -19,8 +21,10 @@ class Input {
   Key LEFT_KEY;
   Key RIGHT_KEY;
   Key SCALE_MOD_KEY;
-  Key TURN_LEFT_KEY;
-  Key TURN_RIGHT_KEY;
+  Key SCALE_X_POSITIVE_KEY;
+  Key SCALE_X_NEGATIVE_KEY;
+  Key SCALE_Y_POSITIVE_KEY;
+  Key SCALE_Y_NEGATIVE_KEY;
 
   Input() {
     heading = up.get();
@@ -30,8 +34,10 @@ class Input {
     LEFT_KEY = new Key();
     RIGHT_KEY = new Key();
     SCALE_MOD_KEY = new Key();
-    TURN_LEFT_KEY = new Key();
-    TURN_RIGHT_KEY = new Key();
+    SCALE_X_POSITIVE_KEY = new Key();
+    SCALE_X_NEGATIVE_KEY = new Key();
+    SCALE_Y_POSITIVE_KEY = new Key();
+    SCALE_Y_NEGATIVE_KEY = new Key();
   }
 
   Input(Input otherInput) {
@@ -40,8 +46,10 @@ class Input {
     downKeyDown = otherInput.downKeyDown;
     leftKeyDown = otherInput.leftKeyDown;
     rightKeyDown = otherInput.rightKeyDown;
-    turnLeftKeyDown = otherInput.turnLeftKeyDown;
-    turnRightKeyDown = otherInput.turnRightKeyDown;
+    scaleXNegativeKeyDown = otherInput.scaleXNegativeKeyDown;
+    scaleXPositiveKeyDown = otherInput.scaleXPositiveKeyDown;
+    scaleYNegativeKeyDown = otherInput.scaleYNegativeKeyDown;
+    scaleYPositiveKeyDown = otherInput.scaleYPositiveKeyDown;
 
     CENTER_KEY = otherInput.CENTER_KEY;
     UP_KEY = otherInput.UP_KEY;
@@ -49,8 +57,10 @@ class Input {
     LEFT_KEY = otherInput.LEFT_KEY;
     RIGHT_KEY = otherInput.RIGHT_KEY;
     SCALE_MOD_KEY = otherInput.SCALE_MOD_KEY;
-    TURN_LEFT_KEY = otherInput.TURN_LEFT_KEY;
-    TURN_RIGHT_KEY = otherInput.TURN_RIGHT_KEY;
+    SCALE_X_POSITIVE_KEY = otherInput.SCALE_X_POSITIVE_KEY;
+    SCALE_X_NEGATIVE_KEY = otherInput.SCALE_X_NEGATIVE_KEY;
+    SCALE_Y_POSITIVE_KEY = otherInput.SCALE_Y_POSITIVE_KEY;
+    SCALE_Y_NEGATIVE_KEY = otherInput.SCALE_Y_NEGATIVE_KEY;
   }
 
   void keyPressed(Key k) {
@@ -74,10 +84,14 @@ class Input {
       rightKeyDown = down;
     } else if (SCALE_MOD_KEY.equals(k)) {
       scaleModKeyDown = down;
-    } else if (TURN_LEFT_KEY.equals(k)) {
-      turnLeftKeyDown = down;
-    } else if (TURN_RIGHT_KEY.equals(k)) {
-      turnRightKeyDown = down;
+    } else if (SCALE_X_NEGATIVE_KEY.equals(k)) {
+      scaleXPositiveKeyDown = down;
+    } else if (SCALE_X_POSITIVE_KEY.equals(k)) {
+      scaleXNegativeKeyDown = down;
+    } else if (SCALE_Y_NEGATIVE_KEY.equals(k)) {
+      scaleYPositiveKeyDown = down;
+    } else if (SCALE_Y_POSITIVE_KEY.equals(k)) {
+      scaleYNegativeKeyDown = down;
     }
   }
 }

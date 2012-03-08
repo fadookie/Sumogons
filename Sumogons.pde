@@ -22,7 +22,7 @@ PVector up;
 PVector down;
 PVector left;
 PVector right;
-float scaleAdjustFactor = 0.1;
+float scaleAdjustFactor = 0.3; //0.1 for mouse
 float movementForce = 1000000;
 
 //Re-using some PVector objects to reduce garbage during calcs in a tight loop
@@ -80,6 +80,10 @@ void setup() {
     input.LEFT_KEY = new Key(LEFT, true);
     input.RIGHT_KEY = new Key(RIGHT, true);
     input.SCALE_MOD_KEY = new Key(ALT, true);
+    input.SCALE_X_NEGATIVE_KEY = new Key('j');
+    input.SCALE_X_POSITIVE_KEY = new Key('l');
+    input.SCALE_Y_NEGATIVE_KEY = new Key('k');
+    input.SCALE_Y_POSITIVE_KEY = new Key('i');
     //input.useMouse = true;
 
     player.setInput(input);
@@ -104,8 +108,10 @@ void setup() {
     input.LEFT_KEY = new Key('a');
     input.RIGHT_KEY = new Key('d');
     input.SCALE_MOD_KEY = new Key(SHIFT, true);
-    input.TURN_LEFT_KEY = new Key('f');
-    input.TURN_RIGHT_KEY = new Key('l');
+    input.SCALE_X_NEGATIVE_KEY = new Key('f');
+    input.SCALE_X_POSITIVE_KEY = new Key('h');
+    input.SCALE_Y_NEGATIVE_KEY = new Key('g');
+    input.SCALE_Y_POSITIVE_KEY = new Key('t');
 
     player.setInput(input);
 
@@ -137,6 +143,7 @@ void draw() {
   //  PlayerController player = players[i];
     Input input = player.getInput();
 
+    /* //Rotation keys are now default, commenting out. 
     if (player.input.useMouse) {
       PVector mousePosition = gWorkVectorA;
       mousePosition.x = mouseX;
@@ -152,7 +159,7 @@ void draw() {
       if (input.turnLeftKeyDown) {
       } else if (input.turnRightKeyDown) {
       }
-    }
+    }*/
 
     //Set movement forces
     float xForce = 0;
@@ -164,28 +171,36 @@ void draw() {
       yForce = movementForce;
     }
 
-    if ("1" == player.tag) {
-      if (input.rightKeyDown) {
-        println("RIGHT");
-        input.rotation = radians(player.turnMagnitude);
-        //input.heading = PMath.rotatePVector2DDebug(player.getHeading(), radians(player.turnAmount));
-      } else if (input.leftKeyDown) {
-        println("LEFT");
-        input.rotation = radians(-player.turnMagnitude);
-        //input.heading = PMath.rotatePVector2DDebug(player.getHeading(), radians(-player.turnAmount));
-      } else {
-        input.rotation = radians(0);
-      }
+    if (input.rightKeyDown) {
+      input.rotation = radians(player.turnMagnitude);
+    } else if (input.leftKeyDown) {
+      input.rotation = radians(-player.turnMagnitude);
+    } else {
+      input.rotation = radians(0);
     }
+
+    PVector playerScale = player.getScale();
+
+    if (input.scaleXNegativeKeyDown) {
+      playerScale.x -= scaleAdjustFactor;
+    } else if (input.scaleXPositiveKeyDown) {
+      playerScale.x += scaleAdjustFactor;
+    }
+
+    if (input.scaleYNegativeKeyDown) {
+      println(player+"scaleY-");
+      playerScale.y -= scaleAdjustFactor;
+    } else if (input.scaleYPositiveKeyDown) {
+      playerScale.y += scaleAdjustFactor;
+    }
+
+    player.setScale(playerScale.x, playerScale.y);
 
     if (input.centerKeyDown) {
       player.resetScale();
-      player.updateShape();
-
-      //For debugging
-      scale.x = 1;
-      scale.y = 1;
     }
+
+    player.updateShape();
 
     player.setRelativeForce(xForce, yForce);
     player.update();
@@ -202,6 +217,7 @@ void draw() {
  * Listener for Mouse wheel movement
  */
 void mouseWheel(int delta) {
+  /*
   //println(delta); 
   PlayerController player = players[0];
   Input input = player.getInput();
@@ -214,6 +230,7 @@ void mouseWheel(int delta) {
   scale.y += delta * scaleAdjustFactor;
   player.setScale(scale.x, scale.y);
   player.updateShape();
+  */
 }
 
 void keyPressed() {

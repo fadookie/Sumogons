@@ -87,6 +87,9 @@ class PolygonController {
     numSides = n;
   }
 
+  PVector getScale() {
+    return scale.get();
+  }
   void resetScale() {
     setScale(defaultScale.x, defaultScale.y);
   }
