@@ -180,6 +180,7 @@ class PolygonController {
 
     //Build new physics body
     poly = new Polygon();
+    poly.setBullet(true);
     poly.setStrokeWeight(3);
     poly.setFill(fillColor.x, fillColor.y, fillColor.z);
     poly.setDensity(10);
@@ -238,5 +239,8 @@ class PolygonController {
     float ms = millis();
     deltaTime = ms - lastUpdate;
     lastUpdate = ms;
+  }
+
+  void draw() {
   }
 }

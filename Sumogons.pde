@@ -48,22 +48,14 @@ void setup() {
   players = new PlayerController[numPlayers];
   gWorkVectorA = new PVector();
 
+  /* //Not using mouse ATM
   addMouseWheelListener(new java.awt.event.MouseWheelListener() { 
     public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) { 
       mouseWheel(evt.getWheelRotation());
-  }}); 
+  }});
+  */
 
   Fisica.init(this);
-
-  //Make the world
-  world = new FWorld();
-  world.setGrabbable(DEBUG); //Only allow mouse grabbing in debug mode
-  world.setGravity(0, 0);
-  world.setEdges();
-  //world.remove(world.left);
-  //world.remove(world.right);
-  //world.remove(world.top);
-  world.setEdgesRestitution(0.5);
 
   //Begin initial game state
   engineChangeState(new PlayState());
@@ -72,8 +64,8 @@ void setup() {
 /**
  * Listener for Mouse wheel movement
  */
+/* //Not using mouse ATM
 void mouseWheel(int delta) {
-  /*
   //println(delta); 
   PlayerController player = players[0];
   Input input = player.getInput();
@@ -86,67 +78,28 @@ void mouseWheel(int delta) {
   scale.y += delta * scaleAdjustFactor;
   player.setScale(scale.x, scale.y);
   player.updateShape();
-  */
+}
+*/
+
+
+void mouseDragged() {
+  engineGetState().mouseDragged();
+}
+
+void mousePressed() {
+  engineGetState().mousePressed();
+}
+
+void mouseReleased() {
+  engineGetState().mouseReleased();
 }
 
 void keyPressed() {
-  Key k = new Key(key, keyCode);
-  //println("Key pressed - " + k);
+  engineGetState().keyPressed();
+}
 
-  for (PlayerController player : players) {
-    Input input = player.getInput();
-    input.keyPressed(k);
-    player.setInput(input);
-  }
-
-  if (CODED == key) {
-  } else {
-    //DEBUG keys
-    if (DEBUG) {
-      if ('p' == key) {
-          disableEnemyUpdate = !disableEnemyUpdate;
-          println(disableEnemyUpdate);
-      } else if ('=' == key) {
-        numSides++;
-        println("numSides = " + numSides);
-      } else if ('-' == key) {
-        numSides--;
-        numSides = constrain(numSides, minSides, 999);
-        println("numSides = " + numSides);
-      } else if ('+' == key) { //Shift +
-        scale.x += scaleAdjustFactor; 
-        println("scale.x = " + scale.x);
-      } else if ('_' == key) { //Shift =
-        scale.x -= scaleAdjustFactor; 
-        println("scale.x = " + scale.x);
-      } else if ('0' == key) {
-        PolygonController poly = new PolygonController(numSides, 50.0, world);
-        poly.setPosition(mouseX, mouseY);
-        poly.setWorld(world);
-        poly.setScale(scale.x, scale.y);
-        poly.updateShape();
-        shapes.add(poly);
-      } else if (key == BACKSPACE) {
-        FBody hovered = world.getBody(mouseX, mouseY);
-        if ( hovered != null &&
-             hovered.isStatic() == false ) {
-          //Destroy the body and PolygonController
-          world.remove(hovered);
-
-          PolygonController hoveredController = null;
-          for (PolygonController p : shapes) {
-            if (hovered == p.getPoly()) {
-              hoveredController = p;
-              break;
-            }
-          }
-          if (null != hoveredController) {
-            shapes.remove(hoveredController);
-          }
-        }
-      }
-    } 
-  }
+void keyReleased() {
+  engineGetState().keyReleased();
 }
 
 PApplet getMainInstance () {
@@ -161,16 +114,6 @@ EnemyController findEnemy(FBody b) {
     }
   }
   return null;
-}
-
-void keyReleased() {
-  Key k = new Key(key, keyCode);
-
-  for (PlayerController player : players) {
-    Input input = player.getInput();
-    input.keyReleased(k);
-    player.setInput(input);
-  }
 }
 
 void draw() {

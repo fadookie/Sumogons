@@ -1,6 +1,16 @@
 class PlayState extends GameState {
 
   void setup() {
+    //Make the world
+    world = new FWorld();
+    world.setGrabbable(DEBUG); //Only allow mouse grabbing in debug mode
+    world.setGravity(0, 0);
+    world.setEdges();
+    //world.remove(world.left);
+    //world.remove(world.right);
+    //world.remove(world.top);
+    world.setEdgesRestitution(0.5);
+
     {
       //Make player 0
       PlayerController player = new PlayerController(numSides, 50.0, world);
@@ -73,24 +83,7 @@ class PlayState extends GameState {
   }
 
   void update() {
-  }
-
-  void draw() {
-    background(255);
-
-    world.step();
-    world.draw(getMainInstance());  
-
-    //Debug draw
-    if (DEBUG) {
-      for (EnemyController enemy : enemies) {
-        enemy.drawPath();
-      }
-    }
-
     for (PlayerController player : players) {
-    //for (int i = 0; i < players.length; i++) {
-    //  PlayerController player = players[i];
       Input input = player.getInput();
 
       /* //Rotation keys are now default, commenting out. 
@@ -163,6 +156,23 @@ class PlayState extends GameState {
     }
   }
 
+  void draw() {
+    background(255);
+
+    world.step();
+    world.draw(getMainInstance());  
+
+    //Debug draw
+    if (DEBUG) {
+      for (EnemyController enemy : enemies) {
+        enemy.drawPath();
+      }
+      for (PlayerController player : players) {
+        player.draw();
+      }
+    }
+  }
+
   void mouseDragged() {
   }
 
@@ -173,8 +183,72 @@ class PlayState extends GameState {
   }
 
   void keyPressed() {
+    Key k = new Key(key, keyCode);
+    //println("Key pressed - " + k);
+
+    for (PlayerController player : players) {
+      Input input = player.getInput();
+      input.keyPressed(k);
+      player.setInput(input);
+    }
+
+    if (CODED == key) {
+    } else {
+      //DEBUG keys
+      if (DEBUG) {
+        if ('p' == key) {
+            disableEnemyUpdate = !disableEnemyUpdate;
+            println(disableEnemyUpdate);
+        } else if ('=' == key) {
+          numSides++;
+          println("numSides = " + numSides);
+        } else if ('-' == key) {
+          numSides--;
+          numSides = constrain(numSides, minSides, 999);
+          println("numSides = " + numSides);
+        } else if ('+' == key) { //Shift +
+          scale.x += scaleAdjustFactor; 
+          println("scale.x = " + scale.x);
+        } else if ('_' == key) { //Shift =
+          scale.x -= scaleAdjustFactor; 
+          println("scale.x = " + scale.x);
+        } else if ('0' == key) {
+          PolygonController poly = new PolygonController(numSides, 50.0, world);
+          poly.setPosition(mouseX, mouseY);
+          poly.setWorld(world);
+          poly.setScale(scale.x, scale.y);
+          poly.updateShape();
+          shapes.add(poly);
+        } else if (key == BACKSPACE) {
+          FBody hovered = world.getBody(mouseX, mouseY);
+          if ( hovered != null &&
+               hovered.isStatic() == false ) {
+            //Destroy the body and PolygonController
+            world.remove(hovered);
+
+            PolygonController hoveredController = null;
+            for (PolygonController p : shapes) {
+              if (hovered == p.getPoly()) {
+                hoveredController = p;
+                break;
+              }
+            }
+            if (null != hoveredController) {
+              shapes.remove(hoveredController);
+            }
+          }
+        }
+      } 
+    }
   }
 
   void keyReleased() {
+    Key k = new Key(key, keyCode);
+
+    for (PlayerController player : players) {
+      Input input = player.getInput();
+      input.keyReleased(k);
+      player.setInput(input);
+    }
   }
 }
