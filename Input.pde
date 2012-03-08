@@ -22,7 +22,7 @@ class Input {
   Key TURN_RIGHT_KEY;
 
   Input() {
-    heading = new PVector();
+    heading = up.get();
     CENTER_KEY = new Key();
     UP_KEY = new Key();
     DOWN_KEY = new Key();

@@ -25,6 +25,7 @@ PVector right;
 float scaleAdjustFactor = 0.1;
 float movementForce = 1000000;
 
+//Re-using some PVector objects to reduce garbage during calcs in a tight loop
 PVector gWorkVectorA;
 
 static final boolean DEBUG = true;
@@ -69,6 +70,7 @@ void setup() {
     player.setScale(scale.x, scale.y);
     player.setFill(new PVector(255, 0, 0));
     player.updateShape();
+    player.tag = "0";
 
     Input input = player.getInput();
 
@@ -78,7 +80,7 @@ void setup() {
     input.LEFT_KEY = new Key(LEFT, true);
     input.RIGHT_KEY = new Key(RIGHT, true);
     input.SCALE_MOD_KEY = new Key(ALT, true);
-    input.useMouse = true;
+    //input.useMouse = true;
 
     player.setInput(input);
 
@@ -92,6 +94,7 @@ void setup() {
     player.setScale(scale.x, scale.y);
     player.setFill(new PVector(0, 0, 255));
     player.updateShape();
+    player.tag = "1";
 
     Input input = player.getInput();
 
@@ -101,7 +104,7 @@ void setup() {
     input.LEFT_KEY = new Key('a');
     input.RIGHT_KEY = new Key('d');
     input.SCALE_MOD_KEY = new Key(SHIFT, true);
-    input.TURN_LEFT_KEY = new Key('j');
+    input.TURN_LEFT_KEY = new Key('f');
     input.TURN_RIGHT_KEY = new Key('l');
 
     player.setInput(input);
@@ -110,10 +113,10 @@ void setup() {
   }
 
   //Make an enemy
-  EnemyController enemy = new EnemyController(3, 50.0, world);
-  enemy.setPosition(width/3, height/3);
-  enemy.updateShape();
-  enemies.add(enemy);
+  //EnemyController enemy = new EnemyController(3, 50.0, world);
+  //enemy.setPosition(width/3, height/3);
+  //enemy.updateShape();
+  //enemies.add(enemy);
 }
 
 void draw() {
@@ -147,12 +150,9 @@ void draw() {
     } else {
       //Process rotation keys if we're not using mouselook
       if (input.turnLeftKeyDown) {
-        input.heading = left.get();
       } else if (input.turnRightKeyDown) {
-        input.heading = right.get();
       }
     }
-
 
     //Set movement forces
     float xForce = 0;
@@ -164,10 +164,14 @@ void draw() {
       yForce = movementForce;
     }
 
-    if (input.rightKeyDown) {
-      xForce = movementForce;
-    } else if (input.leftKeyDown) {
-      xForce = -movementForce;
+    if ("1" == player.tag) {
+      if (input.rightKeyDown) {
+        println("RIGHT");
+        input.heading = PMath.rotatePVector2DDebug(player.getHeading(), radians(player.turnAmount));
+      } else if (input.leftKeyDown) {
+        println("LEFT");
+        input.heading = PMath.rotatePVector2DDebug(player.getHeading(), radians(-player.turnAmount));
+      }
     }
 
     if (input.centerKeyDown) {
@@ -179,7 +183,7 @@ void draw() {
       scale.y = 1;
     }
 
-    player.setRelativeForce(xForce, yForce);
+    player.setForce(xForce, yForce);
     player.update();
   }
 
@@ -188,7 +192,6 @@ void draw() {
       enemy.update();
     }
   }
-
 }
 
 /**
@@ -198,11 +201,13 @@ void mouseWheel(int delta) {
   //println(delta); 
   PlayerController player = players[0];
   Input input = player.getInput();
-  if (input.scaleModKeyDown) {
-    scale.y += delta * scaleAdjustFactor;
-  } else {
-    scale.x += delta * scaleAdjustFactor;
-  }
+  //if (input.scaleModKeyDown) {
+  //  scale.y += delta * scaleAdjustFactor;
+  //} else {
+  //  scale.x += delta * scaleAdjustFactor;
+  //}
+  scale.x += delta * scaleAdjustFactor;
+  scale.y += delta * scaleAdjustFactor;
   player.setScale(scale.x, scale.y);
   player.updateShape();
 }

@@ -1,6 +1,7 @@
 class PlayerController extends PolygonController {
   PVector mousePosition;
   Input input;
+  float turnAmount = 4;
 
   PlayerController(int numSides, float radius) {
     super(numSides, radius);
@@ -38,7 +39,7 @@ class PlayerController extends PolygonController {
 
       PVector lookAt = input.heading;
 
-      float angleBetween = -PVector.dot(lookAt, heading);
+      float angleBetween = -PVector.dot(lookAt, this.heading);
 
       poly.setAngularVelocity(angleBetween * turnSpeed);
 

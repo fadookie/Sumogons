@@ -11,6 +11,7 @@ class PolygonController {
   boolean invincible = true;
   int health = 50;
   PVector fillColor;
+  String tag;
 
   /** Time delta since last update in milliseconds */
   float deltaTime = 0; 
