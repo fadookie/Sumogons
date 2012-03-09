@@ -22,16 +22,15 @@ class EnemyController extends PolygonController {
     enemyMovementForce = movementForce / 350;
     path = new Path();
     turnSpeed = 4;
-    //No auto-path for now. Might never use it.
-    //path.add(new PVector(0, height/2));
-    //path.add(new PVector(width/2, height));
-    //path.add(new PVector(width, height/2));
-    //path.add(new PVector(width/2, 0));
+    //Auto-follow path for enemy
+    path.add(new PVector(0, height/2));
+    path.add(new PVector(width/2, height));
+    path.add(new PVector(width, height/2));
+    path.add(new PVector(width/2, 0));
   }
 
   void update() {
     super.update();
-
 
     if (null != poly) {
       PVector pos = getPosition();

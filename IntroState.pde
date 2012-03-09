@@ -14,11 +14,22 @@ class IntroState extends GameState {
     world.setEdges();
     world.setEdgesRestitution(0.5);
 
-    //Make an enemy
-    EnemyController enemy = new EnemyController(3, 50.0, world);
-    enemy.setPosition(width/3, height/3);
-    enemy.updateShape();
-    enemies.add(enemy);
+    //Make NPCs for the title screen
+    {
+      EnemyController enemy = new EnemyController(3, 58.0, world);
+      enemy.setPosition(width/3, height/3);
+      enemy.setFill(new PVector(255, 0, 0));
+      enemy.updateShape();
+      enemies.add(enemy);
+    }
+
+    {
+      EnemyController enemy = new EnemyController(5, 50.0, world);
+      enemy.setPosition(width/3 + 100, height/3);
+      enemy.setFill(new PVector(0, 0, 255));
+      enemy.updateShape();
+      enemies.add(enemy);
+    }
   }
 
   void cleanup() {
@@ -34,18 +45,28 @@ class IntroState extends GameState {
     for (EnemyController enemy : enemies) {
       enemy.update();
     }
+
+    world.step();
   }
 
   void draw() {
     background(99);
+
+    if (DEBUG) {
+      for (EnemyController enemy : enemies) {
+        enemy.drawPath();
+      }
+    }
+
+    world.draw();
+
     textAlign(CENTER);
     fill(255);
     textFont(omnesSem48);
     text("SumoGONS!", width/2, 200); 
     textFont(omnesSem29);
+    text("by Eliot Lash\nfor GDC Pirate Kart 2012", width/2, 300); 
     text("Press Space", width/2, (height/2 + 300)); 
-
-    world.draw();
   }
 
   void mouseDragged() {
