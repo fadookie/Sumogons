@@ -3,7 +3,7 @@ class NewGameState extends GameState{
   int verticalOffset = -50;
 
   void setup() {
-    leaderboard = new ArrayList<String>();
+    leaderboard = new int[numPlayers];
 
     //Make the world
     world = new FWorld();
@@ -18,28 +18,12 @@ class NewGameState extends GameState{
 
     {
       //Make player 0
-      PlayerController player = new PlayerController(4, 50.0, world);
-      player.setPosition((width / 2) - 100, (height / 2) - 100);
+      PlayerController player = new PlayerController(numSides, 50.0, world);
+      player.setPosition((width / 2) - 100, (height / 2) + 100);
       player.setScale(scale.x, scale.y);
       player.setFill(new PVector(255, 0, 0));
       player.updateShape();
       player.tag = "Red";
-
-      Input input = player.getInput();
-
-      input.CENTER_KEY = new Key('/');
-      input.UP_KEY = new Key(UP, true);
-      input.DOWN_KEY = new Key(DOWN, true);
-      input.LEFT_KEY = new Key(LEFT, true);
-      input.RIGHT_KEY = new Key(RIGHT, true);
-      input.SCALE_MOD_KEY = new Key(ALT, true);
-      input.SCALE_X_NEGATIVE_KEY = new Key('j');
-      input.SCALE_X_POSITIVE_KEY = new Key('l');
-      input.SCALE_Y_NEGATIVE_KEY = new Key('k');
-      input.SCALE_Y_POSITIVE_KEY = new Key('i');
-      //input.useMouse = true;
-
-      player.setInput(input);
 
       players[0] = player;
     }
@@ -52,21 +36,6 @@ class NewGameState extends GameState{
       player.setFill(new PVector(0, 0, 255));
       player.updateShape();
       player.tag = "Blue";
-
-      Input input = player.getInput();
-
-      input.CENTER_KEY = new Key('c');
-      input.UP_KEY = new Key('w');
-      input.DOWN_KEY = new Key('s');
-      input.LEFT_KEY = new Key('a');
-      input.RIGHT_KEY = new Key('d');
-      input.SCALE_MOD_KEY = new Key(SHIFT, true);
-      input.SCALE_X_NEGATIVE_KEY = new Key('f');
-      input.SCALE_X_POSITIVE_KEY = new Key('h');
-      input.SCALE_Y_NEGATIVE_KEY = new Key('g');
-      input.SCALE_Y_POSITIVE_KEY = new Key('t');
-
-      player.setInput(input);
 
       players[1] = player;
     }
@@ -83,6 +52,13 @@ class NewGameState extends GameState{
 
   void update() {
     world.step();
+
+    for (int i = 0; i < numPlayers; i++) {
+      PlayerController player = players[i];
+      int sides = playerSides[i];
+      player.setNumSides(sides);
+      player.updateShape();
+    }
   }
 
   void draw() {
@@ -105,19 +81,36 @@ class NewGameState extends GameState{
   }
 
   void keyPressed() {
-    Key k = new Key(key, keyCode);
-    //println("Key pressed - " + k);
+    //Key k = new Key(key, keyCode);
 
-    for (PlayerController player : players) {
-      Input input = player.getInput();
-      input.keyPressed(k);
-      player.setInput(input);
-    }
+    //for (PlayerController player : players) {
+    //  Input input = player.getInput();
+    //  input.keyPressed(k);
+    //  player.setInput(input);
+    //}
 
-    if ((ENTER == key) ||
-        (RETURN == key)
-      ) {
-      engineChangeState(new PlayState());
+    //HACK HACK HACK
+    if (CODED == key) {
+      if (LEFT == keyCode) {
+        playerSides[0]--;
+        playerSides[0] = constrain(playerSides[0], minSides, 999);
+      } else if (RIGHT == keyCode) {
+        playerSides[0]++;
+        playerSides[0] = constrain(playerSides[0], minSides, 999);
+      }
+    } else {
+      if ((ENTER == key) ||
+          (RETURN == key) ||
+          (' ' == key)
+        ) {
+        engineChangeState(new InterstitialState("Fight!", new PlayState()));
+      } else if ('a' == key) {
+        playerSides[1]--;
+        playerSides[1] = constrain(playerSides[1], minSides, 999);
+      } else if ('d' == key) {
+        playerSides[1]++;
+        playerSides[1] = constrain(playerSides[1], minSides, 999);
+      }
     }
   }
 

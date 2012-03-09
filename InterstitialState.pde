@@ -52,10 +52,22 @@ class InterstitialState extends GameState {
   }
 
   void mousePressed() {
+  }
+
+  void goToNextState() {
     if (resetStateStack) {
       engineResetToState(nextState);
     } else {
       engineChangeState(nextState);
+    }
+  }
+
+  void keyPressed() {
+    if ((ENTER == key) ||
+        (RETURN == key) ||
+        (' ' == key)
+      ) {
+      goToNextState();
     }
   }
 }

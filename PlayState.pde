@@ -165,7 +165,8 @@ class PlayState extends GameState {
     }
 
     //Check for win condition
-    for (PlayerController player : players) {
+    for (int i = 0; i < numPlayers; i++) {
+      PlayerController player = players[i];
       PVector position = player.getPosition();
       if (
           (position.x > width) ||
@@ -175,7 +176,23 @@ class PlayState extends GameState {
          ) {
         println(width + "," + height);
         println(position);
-        engineChangeState(new InterstitialState(player + " loses!", new PlayState()));
+        leaderboard[1 - i]++; //the other player gets a point, only works for 2 players FIXME
+
+        boolean matchWinner = false;
+        int matchWinnerNum = -1;
+        for (int j = 0 ; j < numPlayers; j++) {
+          int score = leaderboard[j];
+          if (score >= maxScore) {
+            matchWinner = true;
+            matchWinnerNum = j;
+          }
+        }
+
+        if (matchWinner) {
+          engineChangeState(new InterstitialState(players[matchWinnerNum] + " wins game!", new NewGameState()));
+        } else {
+          engineChangeState(new InterstitialState(player + " loses match!", new InterstitialState("Fight!", new PlayState())));
+        }
       }
     }
 

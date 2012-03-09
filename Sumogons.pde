@@ -11,13 +11,14 @@ import fisica.*;
 Stack states;
 FWorld world;
 PlayerController[] players;
+int[] leaderboard;
 int[] playerSides;
 ArrayList<PolygonController> shapes;
 ArrayList<EnemyController> enemies;
 PFont omnesSem48;
-ArrayList<String> leaderboard;
 
 int numPlayers = 2;
+int maxScore = 3;
 
 int numSides = 3;
 int minSides = 3;
