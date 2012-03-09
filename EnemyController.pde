@@ -59,10 +59,7 @@ class EnemyController extends PolygonController {
         }
       }
 
-      //Look at player 0
-      PVector playerPosition = players[0].getPosition();
-
-      PVector lookAt = PVector.sub(pos, playerPosition); //FIXME: Use workvector placeholders if this creates too much garbage
+      PVector lookAt = PVector.sub(pos, centerOfScreen); //FIXME: Use workvector placeholders if this creates too much garbage
       lookAt.normalize();
       getHeading(); //update this.heading
 

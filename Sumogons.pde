@@ -29,6 +29,7 @@ PVector up;
 PVector down;
 PVector left;
 PVector right;
+PVector centerOfScreen;
 float scaleAdjustFactor = 0.3; //0.1 for mouse
 float movementForce = 1000000;
 float interstitialLengthMs = 1000;
@@ -52,6 +53,7 @@ void setup() {
   down = new PVector(0, -1);
   left = new PVector(1, 0);
   right = new PVector(-1, 0);
+  centerOfScreen = new PVector(width / 2, height / 2);
   players = new PlayerController[numPlayers];
   playerSides = new int[numPlayers];
   gWorkVectorA = new PVector();
@@ -69,7 +71,7 @@ void setup() {
   Fisica.init(this);
 
   //Begin initial game state
-  engineChangeState(new InstructionState());
+  engineChangeState(new IntroState());
 }
 
 /**

@@ -200,7 +200,7 @@ class PlayState extends GameState {
   }
 
   void draw() {
-    background(255);
+    background(66);
 
     world.draw(getMainInstance());  
 

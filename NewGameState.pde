@@ -63,6 +63,8 @@ class NewGameState extends GameState{
 
   void draw() {
     background(backgroundColor);
+
+    world.draw();
     textFont(omnesSem48);
     textAlign(CENTER);
     fill(255);
