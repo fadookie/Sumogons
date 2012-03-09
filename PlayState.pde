@@ -191,7 +191,7 @@ class PlayState extends GameState {
         if (matchWinner) {
           engineChangeState(new InterstitialState(players[matchWinnerNum] + " wins game!", new NewGameState()));
         } else {
-          engineChangeState(new InterstitialState(player + " loses match!", new InterstitialState("Fight!", new PlayState())));
+          engineChangeState(new InterstitialState(player + " was knocked out!", new InterstitialState("Fight!", new PlayState(), interstitialLengthMs), interstitialLengthMs));
         }
       }
     }

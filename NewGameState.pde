@@ -66,7 +66,11 @@ class NewGameState extends GameState{
     textFont(omnesSem48);
     textAlign(CENTER);
     fill(255);
-    text("Choose your sides!", width/2, (height/2 + verticalOffset)); 
+    text("Choose your sides!", width/2, (height/2 - 100)); 
+    textFont(omnesSem29);
+    text("Red: Left & right arrow keys to select sides", width/2, (height/2 + 200)); 
+    text("Blue: W&D keys to select sides", width/2, (height/2 + 250)); 
+    text("Space to play", width/2, (height/2 + 300)); 
 
     world.draw(getMainInstance());  
   }
@@ -103,7 +107,7 @@ class NewGameState extends GameState{
           (RETURN == key) ||
           (' ' == key)
         ) {
-        engineChangeState(new InterstitialState("Fight!", new PlayState()));
+        engineChangeState(new InterstitialState("Fight!", new PlayState(), interstitialLengthMs));
       } else if ('a' == key) {
         playerSides[1]--;
         playerSides[1] = constrain(playerSides[1], minSides, 999);

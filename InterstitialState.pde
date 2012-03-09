@@ -10,11 +10,20 @@ class InterstitialState extends GameState {
   boolean resetStateStack = false;
   color backgroundColor = color(66);
   int verticalOffset = -50;
+  float displayLengthMs = -1;
+  float displayStartMs = 0;
 
   InterstitialState(String _message, GameState _nextState) {
     super();
     message = _message;
     nextState = _nextState;
+  }
+
+  InterstitialState(String _message, GameState _nextState, float _displayLengthMs) {
+    super();
+    message = _message;
+    nextState = _nextState;
+    displayLengthMs = _displayLengthMs;
   }
 
   InterstitialState(String _message, GameState _nextState, int _verticalOffset) {
@@ -40,6 +49,19 @@ class InterstitialState extends GameState {
   }
 
   void setup() {
+  }
+
+  void update() {
+    if (displayLengthMs >= 0) {
+      if (displayStartMs == 0) {
+        displayStartMs = millis(); //Set timer
+      } else {
+        if((millis() - displayStartMs) > displayLengthMs) {
+          //Timer's up, close this message
+          goToNextState();
+        }
+      }
+    }
   }
 
   void draw() {

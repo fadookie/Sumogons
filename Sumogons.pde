@@ -15,6 +15,8 @@ int[] leaderboard;
 int[] playerSides;
 ArrayList<PolygonController> shapes;
 ArrayList<EnemyController> enemies;
+PFont omnesSem20;
+PFont omnesSem29;
 PFont omnesSem48;
 
 int numPlayers = 2;
@@ -29,6 +31,7 @@ PVector left;
 PVector right;
 float scaleAdjustFactor = 0.3; //0.1 for mouse
 float movementForce = 1000000;
+float interstitialLengthMs = 1000;
 
 //Re-using some PVector objects to reduce garbage during calcs in a tight loop
 PVector gWorkVectorA;
@@ -52,6 +55,8 @@ void setup() {
   players = new PlayerController[numPlayers];
   playerSides = new int[numPlayers];
   gWorkVectorA = new PVector();
+  omnesSem20  = loadFont("Omnes-Semibold-20.vlw");
+  omnesSem29  = loadFont("Omnes-Semibold-29.vlw");
   omnesSem48  = loadFont("Omnes-Semibold-48.vlw");
 
   /* //Not using mouse ATM
@@ -64,7 +69,7 @@ void setup() {
   Fisica.init(this);
 
   //Begin initial game state
-  engineChangeState(new NewGameState());
+  engineChangeState(new InstructionState());
 }
 
 /**
